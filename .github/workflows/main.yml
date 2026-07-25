@@ -22,3 +22,5 @@ jobs:
       with:
         name: misiones-android-apk
         path: bin/*.apk
+
+ 
