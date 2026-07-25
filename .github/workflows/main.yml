@@ -13,4 +13,6 @@ jobs:
       run: pip install buildozer cython kivy
     - name: Build APK
       run: |
-        echo "Cocinando el instalador móvil en la nube..."
+        - name: Run Buildozer
+  run: buildozer android debug
+
