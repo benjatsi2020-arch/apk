@@ -14,12 +14,20 @@ jobs:
         sudo apt update
         sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf automake libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev cmake libffi-dev libssl-dev
         pip install --upgrade pip setuptools cython kivy buildozer
+    - name: Automatically Accept Android SDK Licenses
+      run: |
+        mkdir -p ~/.android
+        touch ~/.android/repositories.cfg
+        if [ -d "$ANDROID_HOME/cmdline-tools/latest/bin" ]; then
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+        elif [ -d "$ANDROID_HOME/tools/bin" ]; then
+          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses || true
+        fi
     - name: Build with Buildozer
       run: |
-        yes | buildozer android debug
+        buildozer android debug
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
         name: misiones-android-apk
         path: bin/*.apk
-
