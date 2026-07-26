@@ -14,15 +14,11 @@ jobs:
         sudo apt update
         sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf automake libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev cmake libffi-dev libssl-dev
         pip install --upgrade pip setuptools cython kivy buildozer
-    - name: Automatically Accept Android SDK Licenses
+    - name: Create Fresh Buildozer Spec
       run: |
-        mkdir -p ~/.android
-        touch ~/.android/repositories.cfg
-        if [ -d "$ANDROID_HOME/cmdline-tools/latest/bin" ]; then
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-        elif [ -d "$ANDROID_HOME/tools/bin" ]; then
-          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses || true
-        fi
+        buildozer init
+        sed -i 's/# android.accept_sdk_license = False/android.accept_sdk_license = True/' buildozer.spec
+        sed -i 's/source.include_exts = py,png,jpg,kv,atlas/source.include_exts = py,png,jpg,kv,atlas/' buildozer.spec
     - name: Build with Buildozer
       run: |
         buildozer android debug
